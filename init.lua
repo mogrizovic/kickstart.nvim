@@ -166,6 +166,9 @@ vim.o.scrolloff = 10
 -- See `:help 'confirm'`
 vim.o.confirm = true
 
+vim.o.foldmethod = 'indent'
+vim.o.foldlevelstart = 10
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -200,6 +203,31 @@ vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left wind
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+
+-- save on Ctrl-s
+vim.keymap.set('n', '<C-s>', '<cmd>w<CR>', {})
+
+-- move selected lines up and down
+vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
+vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
+
+-- when merging line down leave cursor at tbe beginning
+vim.keymap.set('n', 'J', 'mzJ`z')
+
+-- when <C-d> and <C-u> leave the cursor int he midle
+vim.keymap.set('n', '<C-d>', '<C-d>zz')
+vim.keymap.set('n', '<C-u>', '<C-u>zz')
+
+-- same for search
+vim.keymap.set('n', 'n', 'nzzzv')
+vim.keymap.set('n', 'N', 'Nzzzv')
+
+-- when yank - paste over selection - leave the first yank in current paste buffer
+vim.keymap.set('x', 'p', '"_dP')
+
+-- resize buffers
+vim.keymap.set('n', '<C-M-l>', ':vertical resize +2<CR>')
+vim.keymap.set('n', '<C-M-h>', ':vertical resize -2<CR>')
 
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
@@ -939,6 +967,9 @@ require('lazy').setup({
     keys = {
       { '<leader>gg', '<cmd>LazyGit<cr>', desc = 'LazyGit' },
     },
+  },
+  {
+    'sindrets/diffview.nvim',
   },
 
   -- Highlight todo, notes, etc in comments
