@@ -169,6 +169,9 @@ vim.o.confirm = true
 vim.o.foldmethod = 'indent'
 vim.o.foldlevelstart = 10
 
+vim.o.tabstop = 4 -- Number of spaces that a <Tab> counts for while editing
+vim.o.shiftwidth = 4 -- Number of spaces to use for each step of (auto)indent
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -228,6 +231,15 @@ vim.keymap.set('x', 'p', '"_dP')
 -- resize buffers
 vim.keymap.set('n', '<C-M-l>', ':vertical resize +2<CR>')
 vim.keymap.set('n', '<C-M-h>', ':vertical resize -2<CR>')
+
+-- delete buffer without closing the window
+vim.keymap.set('n', '<leader>bd', ':bp<bar>sp<bar>bn<bar>bd<CR>')
+
+-- next buffer
+vim.keymap.set('n', '<S-l>', ':bnext<CR>')
+
+-- previous buffer
+vim.keymap.set('n', '<S-h>', ':bprevious<CR>')
 
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
@@ -312,6 +324,7 @@ require('lazy').setup({
         changedelete = { text = '~' },
       },
     },
+    vim.keymap.set('n', '<leader>gl', '<cmd>Gitsigns blame<CR>', { desc = '[G]it b[l]ame' }),
   },
 
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
@@ -334,7 +347,7 @@ require('lazy').setup({
     opts = {
       -- delay between pressing a key and opening which-key (milliseconds)
       -- this setting is independent of vim.o.timeoutlen
-      delay = 0,
+      delay = 500,
       icons = {
         -- set icon mappings to true if you have a Nerd Font
         mappings = vim.g.have_nerd_font,
@@ -465,7 +478,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
       -- vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
-      vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+      vim.keymap.set('n', '<leader>bb', builtin.buffers, { desc = '[ ] Find existing buffers' })
 
       -- -- Slightly advanced example of overriding default behavior and theme
       -- vim.keymap.set('n', '<leader>/', function()
@@ -803,6 +816,8 @@ require('lazy').setup({
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        terraform = { 'terraform' },
+        hcl = { 'terraform' },
       },
     },
   },
@@ -971,7 +986,12 @@ require('lazy').setup({
   {
     'sindrets/diffview.nvim',
   },
-
+  {
+    'easymotion/vim-easymotion',
+  },
+  {
+    'tpope/vim-obsession',
+  },
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
